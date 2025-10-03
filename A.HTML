@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lluvia de Palabras para Mi Niño</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: black;
+      font-family: 'Arial', sans-serif;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .word {
+      position: absolute;
+      font-size: 4vw;
+      animation: fall linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes fall {
+      0% {
+        top: -50px;
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        top: 100vh;
+        opacity: 0;
+      }
+    }
+
+    footer {
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 4vw;
+      color: white;
+      z-index: 1;
+      padding: 10px;
+    }
+
+    footer a {
+      color: #ff4d4d;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<script>
+  // Fondo estrellado animado
+  const canvas = document.getElementById("stars");
+  const ctx = canvas.getContext("2d");
+  let stars = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+
+  for (let i = 0; i < 200; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5,
+      d: Math.random() * 0.5
+    });
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    for (let i = 0; i < stars.length; i++) {
+      let s = stars[i];
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      s.y += s.d;
+      if (s.y > canvas.height) {
+        s.y = 0;
+        s.x = Math.random() * canvas.width;
+      }
+    }
+    requestAnimationFrame(drawStars);
+  }
+
+  drawStars();
+
+  // Palabras en movimiento
+  const palabras = [
+    "Te quiero 💖", "Mi niño 💫", "Do I Wanna Know?", "505", "Fluorescente", "Labios rotos",
+    "Love is a Laserquest", "Nada", "Corazón ❤️", "Eres mi luz", "Snap Out of It",
+    "Soñé", "Venus", "Electricidad", "R U Mine?", "❤️", "Mi amor eterno", "Lluvia de estrellas",
+    "Eres mi lugar favorito", "Gracias por existir", "Contigo todo es mejor", "Tu sonrisa me calma",
+    "Me haces feliz", "Qué suerte tenerte", "Eres mi paz", "Siempre tú", "Mi cómplice",
+    "Tu voz me abraza", "Me encantas", "Mi universo paralelo", "Eres magia", "Qué bonito es coincidir contigo"
+  ];
+
+  const tipografias = [
+    "Arial", "Georgia", "Courier New", "Comic Sans MS", "Times New Roman", "Verdana", "Trebuchet MS", "Lucida Console"
+  ];
+
+  function crearPalabra() {
+    const palabra = document.createElement("div");
+    palabra.className = "word";
+    palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
+    palabra.style.left = Math.random() * window.innerWidth + "px";
+    palabra.style.animationDuration = (3 + Math.random() * 5) + "s";
+    palabra.style.color = Math.random() > 0.5 ? "red" : "white";
+    palabra.style.fontFamily = tipografias[Math.floor(Math.random() * tipografias.length)];
+    document.body.appendChild(palabra);
+
+    setTimeout(() => {
+      palabra.remove();
+    }, 8000);
+  }
+
+  setInterval(crearPalabra, 300);
+</script>
+
+<footer>
+  Escucha <a href="https://www.youtube.com/watch?v=RXpe-kbDJE8" target="_blank">“Staring” de Tipling Rock</a> 🎶
+</footer>
+
+</body>
+</html>
